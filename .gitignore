@@ -12,4 +12,5 @@ db.sqlite3
 # Configurazioni di editor
 .vscode/
 .idea/
-.DS_Store
+.DS_Store:q
+h:q
