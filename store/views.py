@@ -260,10 +260,8 @@ def search(request):
 
     # Filtra termine cercato
     if searched:
-        if filter_option == 'category':
-            results = results.filter(category__name__icontains=searched)
-        else:
-            results = results.filter(Q(name__icontains=searched) | Q(author__icontains=searched))
+        results = results.filter(Q(name__icontains=searched) | Q(author__icontains=searched) | Q(category__name__icontains=searched))
+
 
     # GET per categoria e tipo dalla navbar
     category_id = request.GET.get('category')
