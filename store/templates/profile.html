@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h3 class="text-center my-5">Il mio Profilo</h3>
+
+    <!-- Modulo per indirizzo di spedizione -->
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h4>Indirizzo di spedizione</h4>
+            <form method="POST" action="{% url 'profile' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ shipping_form.as_p }}
+                <center>
+                    <button type="submit" class="btn btn-primary">Salva Indirizzo</button>
+                </center>
+            </form>
+            <br/><br/><br/>
+        </div>
+    </div>
+
+    <!-- Se l'utente è un supplier, mostra i prodotti aggiunti -->
+    {% if user.is_authenticated and "Supplier" in user.groups.all.0.name %}
+
+        <h4 class="my-5 text-center">I tuoi Prodotti</h4>
+        <div class="row g-3">
+            {% for product in products %}
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
+                    <div class="card h-100">
+                        <a href="{% url 'product' product.id %}">
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 150px; object-fit: cover;">
+                        </a>
+                        <div class="card-body">
+                            <a href="{% url 'product' product.id %}" class="text-decoration-none text-dark">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                            </a>
+                            <p class="card-text">{{ product.price }} €</p>
+                            <p class="card-text text-muted">{{ product.category.name }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center">Non hai ancora aggiunto nessun prodotto.</p>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+</div>
+{% endblock %}

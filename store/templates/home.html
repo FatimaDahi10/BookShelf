@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">If you love to read, you're in the right place</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Un ricco catalogo di libri</p>
+            <p class="lead fw-normal text-white-50 mb-0">Bestseller, novità, classici, grandi premi letterari... naviga tra migliaia di libri e scegli la tua prossima lettura </p>
+        </div>
+    </div>
+
+
+
+<div id="bookCarousel" class="carousel slide" data-bs-ride="carousel" style="width: 70%; max-width: 400px; margin: auto;">
+    <div class="carousel-inner">
+        {% for book in books %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}" style="justify-content: center">
+            <div class="text-center">
+                <a href="{% url 'product' book.id %}">
+                    <img src="{{ book.image.url }}" class="carousel-book-img" alt="{{ book.name }}" style="width: 200px; height: auto; " >
+                </a>
+                <br/>
+                <a href="{% url 'product' book.id %}" style="text-decoration: none; color: white;">{{ book.name }}</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#bookCarousel" data-bs-slide="prev"
+        style="left: -57px;">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#bookCarousel" data-bs-slide="next"
+            >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+</header>
+
+
+<!-- Section-->
+<div class="container-sm px-4 px-lg-5 mt-5">
+    <div class="row">
+        <!-- Products Section -->
+        <div class="col-md-10 col-lg-11 col-xl-12">
+            <!-- MENU FILTERING -->
+                    <div class="dropdown">
+                      <button class="btn btn-info btn-sm dropdown-toggle float-end" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Ordina
+                      </button>
+                      <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="?sort=recent">Più Recenti</a></li>
+                            <li><a class="dropdown-item" href="?sort=top_rated">I più votati</a></li>
+                            <li><a class="dropdown-item" href="?sort=price_low">Prezzo: dal più basso</a></li>
+                            <li><a class="dropdown-item" href="?sort=price_high">Prezzo: dal più alto</a></li>
+                      </ul>
+                    </div>
+
+    <section class="padding-y-lg">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row">
+            {% for product in books_home %}
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <figure class="card-product-grid">
+                        <div class="border p-1" style="height: 400px;">
+                            <a href="{% url 'product' product.id %}" class="d-flex justify-content-center">
+                                <img height="250" class="mix-blend-multiply" src="{{ product.image.url }}">
+                            </a>
+                            <figcaption class="p-3 border-top">
+
+                                <button class="float-end btn btn-light btn-icon add-favourite" value="{{ product.id }}">
+                                    <i class="fa fa-heart"></i>
+                                </button>
+
+                                <button class="float-end btn btn-light btn-icon add-cart" value="{{ product.id }}">
+                                    <i class="fa fa-shopping-cart"></i>
+                                </button>
+
+                                <a href="{% url 'product' product.id %}" style="text-decoration: none; color: inherit;">{{ product.name }}</a>
+
+                                <div class="price text-lg mb-2 fw-bold">€{{ product.price }}</div>
+                                <span class="text-muted">{{ product.category }}</span>
+                            </figcaption>
+                        </div>
+                    </figure>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Controlli di navigazione per la paginazione -->
+<div class="d-flex justify-content-center mt-4">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if books_home.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ books_home.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">First</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+            {% endif %}
+
+            <li class="page-item disabled"><span class="page-link">Page {{ books_home.number }} of {{ books_home.paginator.num_pages }}</span></li>
+
+            {% if books_home.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ books_home.next_page_number }}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ books_home.paginator.num_pages }}">Last</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">Last</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+
+    </div>
+</section>
+
+
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+<section class="trend spad">
+    <div class="container">
+        <div class="row">
+            <!-- Prima sezione: Hot Trend -->
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="trend__content">
+                    <div class="section-title">
+                        <h4>Hot Trend</h4>
+                    </div>
+                    {% for product in books %}
+                    <div class="trend__item d-flex align-items-center mb-3">
+                        <div class="trend__item__pic">
+                            <a href="{% url 'product' product.id %}">
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 70px; height: auto;">
+                            </a>
+                        </div>
+                        <div class="trend__item__text ms-3">
+                            <a href="{% url 'product' product.id %}" style="text-decoration: none; color: inherit;">{{ product.name }}</a>
+                            <p>{{ product.author }}</p>
+                            <div class="review-feedback">
+                              <span>
+                                  <i class="fa fa-star{% if product.averagereview == 0.5 %}-half-o{% elif product.averagereview < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                                  <i class="fa fa-star{% if product.averagereview == 1.5 %}-half-o{% elif product.averagereview < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                  <i class="fa fa-star{% if product.averagereview == 2.5 %}-half-o{% elif product.averagereview < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                  <i class="fa fa-star{% if product.averagereview == 3.5 %}-half-o{% elif product.averagereview < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                  <i class="fa fa-star{% if product.averagereview == 4.5 %}-half-o{% elif product.averagereview < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                                  {{ product.averagereview | stringformat:".2f" }}
+                              </span>
+                            </div>
+                            <div class="product__price">€{{ product.price }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Seconda sezione: Potrebbero interessarti anche -->
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="trend__content">
+                     {% if recommended_books %}
+                    <div class="section-title">
+                        <h4>Potrebbero interessarti anche...</h4>
+                    </div>
+                        {% for product in recommended_books %}
+                        <div class="trend__item d-flex align-items-center mb-3">
+                            <div class="trend__item__pic">
+                                <a href="{% url 'product' product.id %}">
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 70px; height: auto;">
+                                </a>
+                            </div>
+                            <div class="trend__item__text ms-3">
+                                <a href="{% url 'product' product.id %}" style="text-decoration: none; color: inherit;">{{ product.name }}</a>
+                                <p>{{ product.author }}</p>
+                                <div class="review-feedback">
+                                  <span>
+                                      <i class="fa fa-star{% if product.averagereview == 0.5 %}-half-o{% elif product.averagereview < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                                      <i class="fa fa-star{% if product.averagereview == 1.5 %}-half-o{% elif product.averagereview < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                                      <i class="fa fa-star{% if product.averagereview == 2.5 %}-half-o{% elif product.averagereview < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                                      <i class="fa fa-star{% if product.averagereview == 3.5 %}-half-o{% elif product.averagereview < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                                      <i class="fa fa-star{% if product.averagereview == 4.5 %}-half-o{% elif product.averagereview < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                                      {{ product.averagereview | stringformat:".2f" }}
+                                  </span>
+                                </div>
+                                <div class="product__price">€{{ product.price }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<br/>
+    <br/>
+</div>
+
+{% endblock %}

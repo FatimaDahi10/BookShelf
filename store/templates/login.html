@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Quando non si disponi dei permessi -->
+{% if "notok" in request.GET.auth %}
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        Non si disponi dei permessi per accedere a questo servizio!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<div class="container">
+    <div class="row">
+        <center>
+            <div class="col-5">
+                <br/><br/>
+                <center>
+                    <h3>Login</h3>
+                </center>
+                <br/><br/>
+                <form method="POST" action="{% url 'login' %}"> <!-- everytime u login u are posting on the page -->
+                    {% csrf_token %} <!-- crossside request foldery token=> random string of text, for hacker?? -->
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="username" placeholder="Enter Your Username">
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="password" placeholder="Enter your password">
+                    </div>
+
+                    <br/>
+
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <br/>
+                Sei nuovo
+                <a href="{% url 'register' %}" >Registrati</a>
+
+                <br/><br/>
+                <br/><br/>
+                <br/><br/>
+                <br/><br/>
+
+            </div>
+        </center>
+    </div>
+</div>
+{% endblock %}

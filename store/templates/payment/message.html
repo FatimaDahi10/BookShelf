@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 1000px;">
+    <br/>
+
+    {# Se l'utente è un Buyer #}
+    {% if "Buyer" in user.groups.all.0.name %}
+        {% if orders_buyer %}
+            {% for order in orders_buyer %}
+                <div class="card mb-3 mx-auto" style="width: 100%; max-width: 1000px; max-height: 350px">
+                    <div class="row g-0">
+                        <div class="col-3">
+                            <img src="{{ order.product.image.url }}" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-9">
+                            <div class="card-body">
+                                <center>
+                                    <h4 class="card-title"><b>Ordine: {{ order.order.id }}</b></h4>
+                                    <h6> User: {{ order.order.user }}</h6>
+                                    <h6> Fornitore: {{ order.product.added_by }} </h6>
+                                    <h7 class="card-title">Libro: {{ order.product.name }}</h7>
+                                    <br>
+
+                                    <span class="mtext-106 cl2"><b>€ {{ order.price }}</b></span>
+                                    <br>
+                                    <div class="card-body">
+                                        Nome e cognome: {{ order.order.name_surname }}<br/>
+                                        Email: {{ order.order.email }}<br/>
+                                        Indirizzo: {{ order.order.shipping_address }}<br/>
+                                        Data ordine: {{ order.order.date_ordered }}<br/>
+                                        <br/>
+
+                                        {% if not order.shipped or order.order.date_shipped == None %}
+                                            <h6>Ordine non ancora spedito</h6>
+                                        {% else %}
+                                            <h6>Data Spedizione: {{ order.order.date_shipped }}<br/></h6>
+                                        {% endif %}
+                                        <br/>
+
+
+                                    </div>
+                                    <br/><br/>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <br/><br/>
+            {% endfor %}
+        {% else %}
+            <p>Non hai ordini come compratore.</p>
+        {% endif %}
+
+    {# Se l'utente è un Supplier #}
+    {% elif "Supplier" in user.groups.all.0.name %}
+        {% if orders_supplier %}
+            {% for order in orders_supplier %}
+                <div class="card mb-3 mx-auto" style="width: 100%; max-width: 1000px; max-height: 350px">
+                    <div class="row g-0">
+                        <div class="col-3">
+                            <img src="{{ order.product.image.url }}" class="img-fluid rounded-start" alt="...">
+                        </div>
+                        <div class="col-9">
+                            <div class="card-body">
+                                <center>
+                                    <h4 class="card-title"><b>Ordine: {{ order.order.id }}</b></h4>
+                                    <h6> User: {{ order.order.user }}</h6>
+                                    <h7 class="card-title">Libro: {{ order.product.name }}</h7>
+                                    <br>
+
+                                    <span class="mtext-106 cl2"><b>€ {{ order.price }}</b></span>
+                                    <div class="card-body">
+                                        Nome e cognome: {{ order.order.name_surname }}<br/>
+                                        Email: {{ order.order.email }}<br/>
+                                        Indirizzo: {{ order.order.shipping_address }}<br/>
+                                        Data ordine: {{ order.order.date_ordered }}<br/>
+
+                                        {% if not order.shipped %}
+                                            <form method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="order_item_id" value="{{ order.id }}">
+                                                <input type="hidden" name="shipping_status" value="true">
+                                                <button type="Submit" class="btn btn-success">Spedisci</button>
+                                            </form>
+
+                                         {% else %}
+                                            <form method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="order_item_id" value="{{ order.id }}">
+                                                <input type="hidden" name="shipping_status" value="false">
+                                                <button type="Submit" class="btn btn-danger ">Non Spedire</button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                    <br>
+                                    <br/><br/>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Non hai ordini come fornitore.</p>
+        {% endif %}
+    {% else %}
+        <p>Non hai ordini.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

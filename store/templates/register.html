@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Centered Content with Modern Layout -->
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-4">
+      <!-- Card for Buyer Signup -->
+      <div class="card shadow-lg border-light">
+        <div class="card-body text-center">
+          <h5 class="card-title mb-4">Registrati come Acquirente</h5>
+          <p class="card-texts mb-4">Unisciti alla nostra piattaforma e inizia a fare acquisti per le migliori offerte. Scopri una vasta selezioni di miglior libri del momento</p>
+          <a href="{% url 'register_buyer' %}" class="btn btn-primary btn-lg w-100">Registrati come Acquirente</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <!-- Card for Supplier Signup -->
+      <div class="card shadow-lg border-light">
+        <div class="card-body text-center">
+          <h5 class="card-title mb-4">Registrati come Fornitore</h5>
+          <p class="card-texts mb-4">Espandi la tua attività e raggiungi nuovi clienti. Diventa fornitore sulla nostra piattaforma e inizia a vendere i tuoi prodotti</p>
+          <a href="{% url 'register_supplier' %}" class="btn btn-success btn-lg w-100">Registrati come Fornitore</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/>
+{% endblock %}

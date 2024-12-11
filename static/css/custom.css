@@ -1,0 +1,77 @@
+/* STAR */
+.rate > input{
+    display: none;
+}
+
+.rate{
+    display: inline-block;;
+    border: 0;
+}
+
+.rate > label{
+    float: right;
+}
+
+.rate > label:before{
+    display: inline-block;
+    font-size: 1.1rem;
+    font-family: FontAwesome;
+    content: "\f005";
+    margin:0;
+    padding:0.3rem .2rem;
+    cursor: pointer;
+}
+
+/* Half star */
+.rate .half:before{
+    content: "\f089";
+    position: absolute;
+    padding-right: 0;
+}
+
+/* click and hover */
+input:checked ~ label, label:hover ~ label{
+    color: #ffb503;
+}
+
+/* hover highlight */
+input:checked + label:hover, input:checked ~ label:hover,input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label{
+    color: #cc9000;
+}
+
+.review-feedback i{
+    color: #ffb503 !important ;
+}
+
+
+
+.white-background {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px; /* Angoli arrotondati */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombra */
+}
+
+/* description with ... */
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.notify {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 4px 6px;
+    min-width: 20px;
+    text-align: center;
+}
+
+

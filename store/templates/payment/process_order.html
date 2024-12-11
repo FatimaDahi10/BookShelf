@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+  <br/>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+              <h5 class="card-header">Riepilogo Ordine</h5>
+              <div class="card-body">
+                  {% for product in cart_products %}
+                    {{ product.name }}:
+                    €{{ product.price }}
+                    <br/>
+                    <small>Quantity:
+                    {% for key, value in quantities.items %}
+                       {% if key == product.id|slugify %}
+                            {{ value }}
+                       {% endif %}
+                     {% endfor %}</small>
+                     <br/><br/>
+                  {% endfor %}
+
+                  <b>Total:  €{{totals}}</b>
+                  <br/>
+                  <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Modifica</a>
+
+              </div>
+            </div>
+            <br/>
+            <div class="card">
+              <h5 class="card-header">Indirizzo Fatturazione</h5>
+              <div class="card-body">
+                  Nome: {{ info_shipping.shipping_name_surname }}<br/>
+                  Email: {{ info_shipping.shipping_email }}<br/>
+                  Indirizzo: {{ info_shipping.shipping_address }}<br/>
+                  Città: {{ info_shipping.shipping_city }}<br/>
+                  Paese: {{ info_shipping.shipping_country }}<br/>
+                  CAP: {{ info_shipping.shipping_zipcode }}<br/>
+                  <br/>
+                  <a href="{% url 'checkout' %}" class="btn btn-sm btn-outline-secondary">Modifica</a>
+              </div>
+            </div>
+
+                <br/><br/>
+
+            <div class="card">
+            <div class="card-header">Modalità Pagamento</div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'process_order' %}">
+                    {% csrf_token %}
+                 {{ billing_form.as_p }}
+
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Conferma Pagamento</button>
+                </form>
+            </div>
+
+            </div>
+        </div>
+    </div>
+<br/><br/>
+</div>
+
+{% endblock %}

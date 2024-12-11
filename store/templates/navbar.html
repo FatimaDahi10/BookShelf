@@ -1,0 +1,163 @@
+<!-- NAVBAR -->
+{% load static %}
+
+<header class="section-header mobile-hidden">
+  <section class="header-main bg-white border-bottom py-lg-1 py-1">
+
+    <div class="container">
+      <div class="row gx-5 align-items-center">
+        <div class="col-xl-2 col-lg col-4 col-sm-4  col-md flex-grow-0">
+          <a href="{% url 'home' %}" class="navbar-brand">
+            <img class="logo" height="50" src="{% static 'assets/favicon.ico' %}"><strong>BOOKSHELF</strong>
+          </a>
+        </div>
+
+        <div class="col-xl-7 col-lg-5 col-12 col-sm-12 col-md">
+
+          <form method="POST" class="search my-1 my-lg-0 ms-xl-4" action="{% url 'search' %}">
+            {% csrf_token %}
+            <div class="input-group">
+              <input type="search" class="form-control" style="width:55%" placeholder="Search" name="searched">
+              <select class="form-select" name="filter">
+                 <option value="">Tutti tipi</option>
+                 <option value="category">Categorie</option>
+                 <option value="price_asc">Prezzo crescente</option>
+                 <option value="price_desc">Prezzo decrescente</option>
+                 <option value="reviews">Più votato</option>
+              </select>
+                <button class="btn btn-primary" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+            </div>
+          </form>
+        </div>
+
+
+        <div class="col-xl-3 col-lg-4 col-md-10 col-10">
+          <!-- widgets-wrap  -->
+          <nav class="d-flex justify-content-end ms-4">
+
+            <div class="col mx-2 text-center">
+              <div class="nav-item dropdown">
+                <a href="#!" class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="fs-5 d-inline-block"> <i class="fa fa-user"></i> </span>
+                  <small class="d-block text-dark text-truncate">Profilo</small>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  {% if user.is_authenticated %}
+                    <li><a class="dropdown-item" href="{% url 'profile' %}">Profilo</a></li>
+                  {% endif %}
+                  <li><a class="dropdown-item" href="{% url 'register' %}">Registrati</a></li>
+
+                    {% if "Supplier" in user.groups.all.0.name or user.is_staff %}
+                        <li><a class="dropdown-item" href="{% url 'add_product' %}">Aggiungi Prodotto</a></li>
+                    {% endif %}
+
+
+                  {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                  {% else %}
+                    <li class="nav-item"><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                  {% endif %}
+
+
+                </ul>
+              </div>
+            </div>
+
+            <!-- BOTTONE MESSAGES -->
+    <div class="col mx-2 text-center">
+      <a href="{% url 'message' %}" class="nav-link">
+          <span class="icon-28 fs-5 d-inline-block position-relative">
+              <i class="fa fa-commenting"></i>
+              {% if unread_notifications_count > 0 %}
+                  <span class="notify">{{ unread_notifications_count }}</span>
+              {% endif %}
+          </span>
+          <small class="d-block text-dark text-truncate">Messaggi</small>
+      </a>
+  </div>
+
+            <!-- FAVOURITE -->
+            <div class="col mx-2 text-center">
+              <a href="{% url 'favourite_summary' %}" class="nav-link">
+                <span class="fs-5 d-inline-block"> <i class="fa fa-heart"></i> </span>
+                <small class="d-block text-dark text-truncate"> Preferiti </small>
+              </a>
+            </div>
+
+            <div class="col mx-2 text-center">
+              <a href="{% url 'cart_summary' %}" class="nav-link">
+                <span class="fs-5 d-inline-block"> <i class="fa fa-shopping-cart"></i> </span>
+                <small class="d-block text-dark text-truncate"> Carrello
+                  <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity">{{ cart|length }}</span> </small>
+              </a>
+            </div>
+
+          </nav>
+          <!-- widgets-wrap.// -->
+        </div> <!-- col end.// -->
+      </div> <!-- row end.// -->
+    </div> <!-- container end.// -->
+  </section> <!-- header-main end.// -->
+
+  <nav class="navbar navbar-light bg-white navbar-expand-lg border-bottom">
+    <div class="container">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_main" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="navbar_main">
+        <ul class="navbar-nav">
+          <!-- CATEGORIES -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" onclick="return false;">
+              Categorie
+            </a>
+              <ul class="dropdown-menu" >
+                {% for category in categories %}
+                  <li>
+                    <a class="dropdown-item" href="{% url 'search' %}?category={{ category.id }}">{{ category.name }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+          </li>
+
+          <!-- TYPES -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}?type=book">Libri</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}?type=children_teenagers">Bambini e Ragazzi</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}?type=manga_comics">Manga e Fumetti</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}?type=vintage_book">Libri Vintage</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}?type=ebook_audiobook">eBook e Audiobook</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" >Besteller</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="return false;">Novità</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about' %}">About Us</a>
+          </li>
+        </ul>
+
+
+
+
+      </div> <!-- collapse end.// -->
+    </div> <!-- container end.// -->
+  </nav> <!-- navbar end.// -->
+
+</header>

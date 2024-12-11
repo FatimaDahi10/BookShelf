@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h3>Registrazione come Fornitore</h3>
+            <br/><br/>
+            <form method="POST" action="{% url 'register_supplier' %}"> <!-- everytime u login u are posting on the page -->
+                {% csrf_token %} <!-- crossside request foldery token=> random string of text-->
+                {{ form.as_p }}
+                <br/><br/>
+                <center>
+                    <button type="submit" class="btn btn-primary">Sign up</button>
+                </center>
+            </form>
+
+            <br/><br/>
+        </div>
+    </div>
+</div>
+{% endblock %}

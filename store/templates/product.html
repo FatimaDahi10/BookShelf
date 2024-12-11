@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+
+  <br/>
+  <div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent white-background"> <!-- Aggiunta della classe white-background -->
+    <div class="row">
+      <div class="col-md-6 col-lg-4 p-b-30">
+        <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-6 col-lg-5 p-b-30">
+        <div class="p-r-50 p-t-5 p-lr-0-lg">
+          <h4 class="card-title"><b>{{ product.name }}</b></h4>
+          <h7 class="card-title">di {{ product.author }} (Autore)</h7><br/><br/>
+            <strong><h7 class="card-title">{{ product.category }}</h7></strong>
+
+            <br>
+            <!-- Select quantity -->
+            <p>
+                  <br>
+
+                <button class="btn btn-light add-favourite" value="{{ product.id }}"><i class="fa fa-heart"></i></button>
+                <button class="btn btn-light add-cart" value="{{ product.id }}"><i class="fa fa-shopping-cart"></i></button>
+                <p>Fornitore: <a href="{% url 'supplier_profile' product.added_by.id %}">{{ product.added_by }}</a></p>
+
+            </p>
+                        <div class="row justify-content">
+                            <div class="col-md-2">Quantity:</div>
+                            <div class="col-md-2">
+                                <select class="form-select" id="qty-cart">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+            <br>
+          <span class="mtext-106 cl2"><b>€ {{ product.price }}</b></span>
+          <br>
+          <div class="review-feedback">
+              <span>
+                  <i class="fa fa-star{% if product.averagereview == 0.5 %}-half-o{% elif product.averagereview < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.averagereview == 1.5 %}-half-o{% elif product.averagereview < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.averagereview == 2.5 %}-half-o{% elif product.averagereview < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.averagereview == 3.5 %}-half-o{% elif product.averagereview < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                  <i class="fa fa-star{% if product.averagereview == 4.5 %}-half-o{% elif product.averagereview < 5 %}-o {% endif %}" aria-hidden="true"></i>
+                  {{ product.averagereview | stringformat:".2f" }}
+              </span>
+          </div>
+
+
+        </div>
+          <br>
+        <div class="card-body"><b>Descrizione</b>
+          <p class="text-body">{{ product.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+    <br/><br/>
+
+    <h2>Libri simili</h2>
+<ul>
+
+    <!-- Recoomandation System -->
+    <div class="container">
+    <div class="row g-1">
+        {% for product in recommended_books %}
+            <div class="col-6 col-md-2">
+                <div class="card" style="width: 100%; height: 200px;">
+                    <a href="{% url 'product' product.id %}" >
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 100px; object-fit: cover;">
+                     </a>
+                    <div class="card-body p-2 text-center">
+                        <a href="{% url 'product' product.id %}" style="text-decoration: none; color: inherit;">{{ product.name }}</a>
+                        <p class="card-text mb-1" style="font-size: 0.8rem;">{{ product.price }} €</p>
+                        <p class="card-text mb-1">{{ product.category }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+</ul>
+
+  <br>
+  <br>
+  <br>
+    <!-- RECENSIONI -->
+<div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent white-background">
+  <div class="row">
+    <div class="col-md-9">
+      <header class="section-heading">
+        <h3>Recensioni clienti</h3>
+        <form method="POST" action="{% url 'submit_review' product_id=product.id %}">
+          {% csrf_token %}
+          <h5>Recensisci questo prodotto</h5>
+          <div>
+            <!-- Rating star (ogni star è obbligatoria) -->
+            <label>Valutazione</label>
+            <br>
+
+            <div class="rate">
+              <input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>
+              <input type="radio" name="rating" id="rating9" value="4.5" required /><label for="rating9" title="4.5" class="half"></label>
+              <input type="radio" name="rating" id="rating8" value="4" required /><label for="rating8" title="4"></label>
+              <input type="radio" name="rating" id="rating7" value="3.5" required /><label for="rating7" title="3.5" class="half"></label>
+              <input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="3"></label>
+              <input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
+              <input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="2"></label>
+              <input type="radio" name="rating" id="rating3" value="1.5" required /><label for="rating3" title="1.5" class="half"></label>
+              <input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
+              <input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half"></label>
+            </div>
+            <br>
+
+            Recensione:
+            <textarea name="review" rows="4" class="form-control"></textarea>
+            <br>
+
+            <!-- Puoi pubblicare se sei autenticato come Acquirente -->
+              {% if "Buyer" in user.groups.all.0.name %}
+                <center>
+                    <input type="submit" value="Pubblica" class="btn btn-primary">
+                </center>
+              {% endif %}
+          </div>
+        </form>
+
+       <br>
+      </header>
+    </div>
+
+     <div>
+    <br>
+    {% for review in reviews %}
+        <div class="card">
+            <div class="card-header">
+                <span class="date text-muted float-md-right" style="float: right;">{{ review.update_at }}</span>
+                <h6>{{ review.user }}</h6>
+            </div>
+
+            <div class="card-body">
+
+                <div class="review-feedback">
+                    <span>
+                        <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o {% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o {% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o {% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o {% endif %}" aria-hidden="true"></i>
+                        <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o {% endif %}" aria-hidden="true"></i>
+
+                    </span>
+                    {{ review.rating | stringformat:".2f" }}
+                </div>
+
+                <br>
+                <!-- Se l'utente è autenticato come Buyer, mostra la recensione -->
+                {% if user.is_authenticated and "Buyer" in user.groups.all.0.name or user.is_staff %}
+                    <p title="Source Title">{{ review.review }}</p>
+                {% endif %}
+            </div>
+
+        </div>
+        <br>
+    {% endfor %}
+    {% if not user.is_authenticated %}
+        <p>Per leggere le recensioni complete: <a href="{% url 'login' %}">accedi</a>.</p>
+    {% endif %}
+</div>
+</div>
+</div>
+
+    <br>
+</div>
+
+
+
+{% endblock %}

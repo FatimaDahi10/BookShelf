@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <br/>
+    {% if favourite_products %}
+        {% for product in favourite_products %}
+        <div class="card mb-3 mx-auto" style="max-width: 900px;">
+            <div class="row g-0">
+              <div class="col-3">
+                <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+              </div>
+              <div class="col-9">
+                <div class="card-body">
+                    <center>
+                      <h4 class="card-title"><b>{{ product.name }}</b></h4>
+                      <h7 class="card-title">di {{ product.author }} (Autore)</h7>
+                        <h6>{{ product.added_by }}</h6>
+                      <br>
+                        <div class="card-body"><b>Descrizione</b>
+
+                          <p class="card-text text-justify">{{ product.description|truncatechars:100 }}</p>
+                        </div>
+                      <span class="mtext-106 cl2"><b>€ {{ product.price }}</b></span>
+                      <br>
+                        <br/><br/>
+                        <br/>
+
+                        <button type="button" data-index="{{product.id}}"
+                                class="btn btn-danger delete-product">Rimuovi</button>
+
+
+                    </center>
+                </div>
+              </div>
+            </div>
+          </div>
+    <br/><br/>
+        {% endfor %}
+
+
+        <br/><br/><br/>
+        {% else %}
+        Nessun articolo nel carrello...
+    <br/><br/>
+     <br/><br/><br/><br/><br/>    <br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/>
+        <br/><br/><br/><br/><br/>
+
+    {% endif  %}
+</div>
+
+
+<script>
+
+
+//Delete Item
+$(document).on('click', '.delete-product', function(e){
+    e.preventDefault();
+
+    $.ajax({
+        type: 'POST',
+        url: '{% url 'remove_favourite' %}',
+        data: {
+            product_id: $(this).data('index'),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+        },
+
+        success: function(json){
+            location.reload();
+        },
+
+        error: function(xhr, errmsg, err){
+
+        }
+    });
+
+})
+
+</script>
+
+{% endblock %}

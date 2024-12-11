@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="col-md-6">
+        <br/><br/>
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-center mb-4">Aggiungi un Prodotto</h3>
+                <form method="POST" action="{% url 'add_product' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <table class="table">
+                            {{ form.as_table }}
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">Invia</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br/><br/><br/>
+{% endblock %}

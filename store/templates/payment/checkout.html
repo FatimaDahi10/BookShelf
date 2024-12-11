@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+  <br/>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+              <h5 class="card-header">Riepilogo Ordine</h5>
+              <div class="card-body">
+                  {% for product in cart_products %}
+                  <img src="{{ product.image.url }}" class="img-fluid rounded-start" width="100" alt="...">
+                    {{ product.name }}:
+                    €{{ product.price }}
+
+                    <br/>
+                    <small>Quantity:
+                    {% for key, value in quantities.items %}
+                       {% if key == product.id|slugify %}
+                            {{ value }}
+                       {% endif %}
+                     {% endfor %}</small>
+                     <br/><br/>
+                  {% endfor %}
+
+                  <b>Total:  €{{totals}}</b>
+                  <br/>
+                  <a href="{% url 'cart_summary' %}" class="btn btn-sm btn-outline-secondary">Update Items</a>
+
+              </div>
+            </div>
+            <br/>
+             <div class="card">
+            <div class="card-header">Spedizione</div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'checkout' %}">
+                    {% csrf_token %}
+                 {{ shipping_form.as_p }}
+
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Conferma Carrello</button>
+                </form>
+            </div>
+        </div>
+        <br/>
+    </div>
+</div>
+<br/><br/>
+<br/><br/>
+</div>
+
+{% endblock %}
