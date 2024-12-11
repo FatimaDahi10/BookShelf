@@ -1,4 +1,3 @@
-PACCHETTI DA INSTALLARE DA TERMINALE:
+Pacchetti da installare da terminale:
   Pip install Pillow
   pip install django-notifications-hq 
-
